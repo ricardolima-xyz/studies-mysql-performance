@@ -1,0 +1,15 @@
+USE THIS COMMAND TO RUN THE CONTAINER CONTAINER
+docker run --name some-mysql -v ~/code/studies-mysql-performance/:/code/ -e MYSQL_ROOT_PASSWORD=pass -d mysql 
+
+mysql -u root -p
+(enter pass)
+create database world;
+create database sakila;
+exit;
+
+mysql -u root -p world < world.sql
+(enter pass)
+mysql -u root -p sakila < sakila-db/sakila-schema.sql
+(enter pass)
+mysql -u root -p sakila < sakila-db/sakila-data.sql
+(enter pass)
