@@ -1,0 +1,30 @@
+-- Adjusting the Buffer Pool Size
+
+-- The default size of 128Mb is nice for setting up a test instance on your laptop without a 
+-- draining of your memory. This is why the default value is so small. But, for production
+-- systems, you most likely want to allocate more memory.
+
+-- Verify Buffer Pool Size
+SHOW GLOBAL variables like 'innodb_buffer_pool_size';
+-- Set a global system variable 'innodb_buffer_pool_size' as 1 GB
+SET GLOBAL innodb_buffer_pool_size = 1073741824;
+-- Set a session system variable 'innodb_buffer_pool_size' as 1 GB
+SET SESSION innodb_buffer_pool_size = 1073741824;
+-- Persist a global system variable to the mysqld-auto.cnf file (and set the runtime value)
+-- 'innodb_buffer_pool_size' as 1 GB
+SET PERSIST innodb_buffer_pool_size = 1073741824;
+
+
+-- Calculate the Buffer Pool Hit Rate
+-- We should aim at having the buffer pool hit rate as close as 100% as possible
+
+SELECT Variable_name, Variable_value
+         FROM sys.metrics
+        WHERE Variable_name IN
+                ('Innodb_pages_read',
+                 'Innodb_buffer_pool_read_requests')\G
+SELECT 100 - (100 * %Innodb_pages_read%/%Innodb_buffer_pool_read_requests%) AS HitRate;
+
+-- Buffer pool instances
+-- One way to reduce the contention, for parallel workloads, is to split the buffer pool into
+-- multiple instances, with different mutexes for each instance. 

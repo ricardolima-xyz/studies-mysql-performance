@@ -1,0 +1,5 @@
+-- Using Redundant Indexes
+-- IMPORTANT! Adding new indexes might have an impact for insert, update and delete operations!
+
+-- Composite Indexes extra remarks
+select * from sys.schema_redundant_indexes\G -- Identifying useless redundant indexes
